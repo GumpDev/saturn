@@ -1,0 +1,72 @@
+[gd_scene load_steps=16 format=3 uid="uid://jq760l6cm533"]
+
+[ext_resource type="Script" path="res://addons/saturn/SaturnStatePlayer.gd" id="1_787cm"]
+[ext_resource type="Script" path="res://addons/saturn/scripts/state_machine_manager.gd" id="1_pr6ex"]
+[ext_resource type="Script" path="res://addons/saturn/resources/states/SaturnStateValue.gd" id="2_6fgys"]
+[ext_resource type="Script" path="res://addons/saturn/resources/states/SaturnStateCondition.gd" id="3_mytn2"]
+[ext_resource type="Script" path="res://addons/saturn/resources/states/SaturnStateCooldown.gd" id="4_xuph4"]
+[ext_resource type="Script" path="res://addons/saturn/resources/states/SaturnStateGroup.gd" id="5_7a7l4"]
+[ext_resource type="Script" path="res://AdapterTest.gd" id="6_v18t5"]
+
+[sub_resource type="Resource" id="Resource_b4w40"]
+script = ExtResource("2_6fgys")
+value = "1"
+
+[sub_resource type="Resource" id="Resource_gjwkx"]
+script = ExtResource("3_mytn2")
+argument_name = "space"
+operator = 1
+value = "true"
+children = Array[Resource("res://addons/saturn/resources/states/SaturnState.gd")]([SubResource("Resource_b4w40")])
+
+[sub_resource type="Resource" id="Resource_ovlme"]
+script = ExtResource("2_6fgys")
+value = "2"
+
+[sub_resource type="Resource" id="Resource_nh7d3"]
+script = ExtResource("4_xuph4")
+time = 5.0
+children = Array[Resource("res://addons/saturn/resources/states/SaturnState.gd")]([SubResource("Resource_ovlme")])
+
+[sub_resource type="Resource" id="Resource_41umc"]
+script = ExtResource("3_mytn2")
+argument_name = "ctrl"
+operator = 1
+value = "true"
+children = Array[Resource("res://addons/saturn/resources/states/SaturnState.gd")]([SubResource("Resource_nh7d3")])
+
+[sub_resource type="Resource" id="Resource_0274l"]
+script = ExtResource("2_6fgys")
+value = "0"
+
+[sub_resource type="Resource" id="Resource_gjhua"]
+script = ExtResource("5_7a7l4")
+children = Array[Resource("res://addons/saturn/resources/states/SaturnState.gd")]([SubResource("Resource_gjwkx"), SubResource("Resource_41umc"), SubResource("Resource_0274l")])
+
+[sub_resource type="Resource" id="Resource_g727x"]
+script = ExtResource("6_v18t5")
+
+[node name="StateMachineManager" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pr6ex")
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+allow_reselect = true
+hide_root = true
+select_mode = 1
+
+[node name="SaturnStatePlayerTest" type="Node" parent="."]
+script = ExtResource("1_787cm")
+state_machine = SubResource("Resource_gjhua")
+data_adapter = SubResource("Resource_g727x")
