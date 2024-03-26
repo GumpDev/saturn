@@ -1,31 +1,31 @@
 [gd_scene load_steps=6 format=3 uid="uid://d2s3523g1htp3"]
 
 [ext_resource type="Texture2D" uid="uid://cccdclxkeqb2v" path="res://addons/saturn/icons/TreeGroup.svg" id="1_cu7ww"]
+[ext_resource type="Script" path="res://addons/saturn/scripts/state_machine_add.gd" id="1_xcxoq"]
 [ext_resource type="Texture2D" uid="uid://3bvoh067yaao" path="res://addons/saturn/icons/TreeCondition.svg" id="2_u4xfd"]
 [ext_resource type="Texture2D" uid="uid://cj5w2qtl5wcru" path="res://addons/saturn/icons/TreeCooldown.svg" id="3_qokxv"]
 [ext_resource type="Texture2D" uid="uid://4xn7400eioe" path="res://addons/saturn/icons/TreeValue.svg" id="4_8kyj5"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dx8gw"]
-bg_color = Color(0.176471, 0.176471, 0.176471, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.239216, 0.239216, 0.239216, 1)
+[node name="StateMachineAdd" type="Window"]
+title = "Add State"
+size = Vector2i(200, 200)
+unresizable = true
+always_on_top = true
+popup_window = true
+script = ExtResource("1_xcxoq")
 
-[node name="StateMachineItems" type="ItemList"]
+[node name="ItemList" type="ItemList" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dx8gw")
 item_count = 4
-item_0/text = "Group"
-item_0/icon = ExtResource("1_cu7ww")
-item_1/text = "Condition"
-item_1/icon = ExtResource("2_u4xfd")
-item_2/text = "Cooldown"
-item_2/icon = ExtResource("3_qokxv")
+item_0/text = "Condition"
+item_0/icon = ExtResource("2_u4xfd")
+item_1/text = "Cooldown"
+item_1/icon = ExtResource("3_qokxv")
+item_2/text = "Group"
+item_2/icon = ExtResource("1_cu7ww")
 item_3/text = "State"
 item_3/icon = ExtResource("4_8kyj5")

@@ -6,5 +6,8 @@ func get_data(state):
 func get_data_name(state):
 	return state
 
+func to_data(state):
+	return state
+
 func get_data_list():
-	return {}
+	return []

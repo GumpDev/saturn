@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://jq760l6cm533"]
+[gd_scene load_steps=18 format=3 uid="uid://jq760l6cm533"]
 
 [ext_resource type="Script" path="res://addons/saturn/SaturnStatePlayer.gd" id="1_787cm"]
 [ext_resource type="Script" path="res://addons/saturn/scripts/state_machine_manager.gd" id="1_pr6ex"]
@@ -7,7 +7,8 @@
 [ext_resource type="Script" path="res://addons/saturn/resources/states/SaturnStateCooldown.gd" id="4_xuph4"]
 [ext_resource type="Script" path="res://addons/saturn/resources/states/SaturnStateGroup.gd" id="5_7a7l4"]
 [ext_resource type="Script" path="res://AdapterTest.gd" id="6_v18t5"]
-[ext_resource type="PackedScene" uid="uid://d2s3523g1htp3" path="res://addons/saturn/scenes/state_machine_items.tscn" id="8_gms3u"]
+[ext_resource type="PackedScene" uid="uid://d2s3523g1htp3" path="res://addons/saturn/scenes/state_machine_add.tscn" id="8_gms3u"]
+[ext_resource type="PackedScene" uid="uid://c2baoe3pf77tc" path="res://addons/saturn/scenes/state_machine_edit_values.tscn" id="9_8sm62"]
 
 [sub_resource type="Resource" id="Resource_b4w40"]
 script = ExtResource("2_6fgys")
@@ -72,13 +73,9 @@ script = ExtResource("1_787cm")
 state_machine = SubResource("Resource_gjhua")
 data_adapter = SubResource("Resource_g727x")
 
-[node name="AddWindow" type="Window" parent="."]
-size = Vector2i(200, 200)
+[node name="AddWindow" parent="." instance=ExtResource("8_gms3u")]
 visible = false
-wrap_controls = true
-unresizable = true
-borderless = true
-always_on_top = true
-transparent = true
 
-[node name="StateMachineItems" parent="AddWindow" instance=ExtResource("8_gms3u")]
+[node name="StateMachineEditValues" parent="." instance=ExtResource("9_8sm62")]
+visible = false
+popup_window = true
