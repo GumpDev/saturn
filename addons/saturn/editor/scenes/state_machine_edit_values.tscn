@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c2baoe3pf77tc"]
 
-[ext_resource type="Script" path="res://addons/saturn/scripts/state_machine_edit_values.gd" id="1_ynhd0"]
+[ext_resource type="Script" path="res://addons/saturn/editor/scripts/state_machine_edit_values.gd" id="1_ynhd0"]
 
 [node name="StateMachineEditValues" type="ConfirmationDialog"]
 title = "Add state"

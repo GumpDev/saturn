@@ -12,6 +12,3 @@ func get_state(context: SaturnContext):
 			context.cooldowns.append(self)
 		return state
 	return null
-
-func get_state_name(_context: SaturnContext):
-	return "Cooldown -> %2.fs" % [time]

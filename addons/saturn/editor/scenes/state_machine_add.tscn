@@ -1,18 +1,20 @@
 [gd_scene load_steps=6 format=3 uid="uid://d2s3523g1htp3"]
 
 [ext_resource type="Texture2D" uid="uid://cccdclxkeqb2v" path="res://addons/saturn/icons/TreeGroup.svg" id="1_cu7ww"]
-[ext_resource type="Script" path="res://addons/saturn/scripts/state_machine_add.gd" id="1_xcxoq"]
+[ext_resource type="Script" path="res://addons/saturn/editor/scripts/state_machine_add.gd" id="1_xcxoq"]
 [ext_resource type="Texture2D" uid="uid://3bvoh067yaao" path="res://addons/saturn/icons/TreeCondition.svg" id="2_u4xfd"]
 [ext_resource type="Texture2D" uid="uid://cj5w2qtl5wcru" path="res://addons/saturn/icons/TreeCooldown.svg" id="3_qokxv"]
 [ext_resource type="Texture2D" uid="uid://4xn7400eioe" path="res://addons/saturn/icons/TreeValue.svg" id="4_8kyj5"]
 
-[node name="StateMachineAdd" type="Window"]
+[node name="StateMachineAdd" type="Window" node_paths=PackedStringArray("item_list")]
 title = "Add State"
 size = Vector2i(200, 200)
 unresizable = true
+borderless = true
 always_on_top = true
 popup_window = true
 script = ExtResource("1_xcxoq")
+item_list = NodePath("ItemList")
 
 [node name="ItemList" type="ItemList" parent="."]
 anchors_preset = 15
@@ -29,3 +31,6 @@ item_2/text = "Group"
 item_2/icon = ExtResource("1_cu7ww")
 item_3/text = "State"
 item_3/icon = ExtResource("4_8kyj5")
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="item_clicked" from="ItemList" to="." method="_on_item_list_item_clicked"]

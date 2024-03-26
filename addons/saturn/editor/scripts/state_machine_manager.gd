@@ -1,40 +1,42 @@
 @tool
 extends Control
 
-@onready var tree = $Tree
-@onready var add_window = $AddWindow
-@onready var edit_window = $StateMachineEditValues
-@onready var test_player = $SaturnStatePlayerTest
+@export var tree: Tree
+@export var add_window: Window
+@onready var machine_player: SaturnStatePlayer
 
 var context: SaturnContext
 var state_machine: SaturnStateGroup
 
 const SaturnListTreeUtils = preload("res://addons/saturn/utils/SaturnListTreeUtils.gd")
+const SaturnStateNameUtils = preload("res://addons/saturn/utils/SaturnStateNameUtils.gd")
 var list_tree_utils
+var state_name_utils
 
-func _ready():
-	state_machine = test_player.state_machine
+func init(_machine_player: SaturnStatePlayer):
+	machine_player = _machine_player
+	state_machine = machine_player.state_machine
+	context = SaturnContext.new()
+	context.data_adapter = machine_player.data_adapter
+	
 	list_tree_utils = SaturnListTreeUtils.new(state_machine)
-	context = test_player.context
+	state_name_utils = SaturnStateNameUtils.new(context)
+	
 	tree.button_clicked.connect(_button_clicked)
-	edit_window.on_edited.connect(load_tree)
+	tree.item_edited.connect(_state_renamed)
 	load_tree()
+
+func _state_renamed():
+	var tree_item = tree.get_edited()
+	var state = list_tree_utils.get_state(tree_item)
+	state.custom_name = tree_item.get_text(0)
+	if not tree_item.get_text(0):
+		tree_item.set_text(0, state_name_utils.get_state_name(state))
 
 func _button_clicked(item: TreeItem, column: int, id: int, mouse_button_index: int):
 	if id == 1:
-		add_window.show_window(get_viewport().get_mouse_position() + Vector2(-200, 0))
-		var index = await add_window.button_clicked
-		match index:
-			0:
-				edit_window.show_popup(2, context, list_tree_utils.get_state(item))
-			1:
-				edit_window.show_popup(1, context, list_tree_utils.get_state(item))
-			2:
-				# apenas adicionar
-				pass
-			3:
-				edit_window.show_popup(0, context, list_tree_utils.get_state(item))
-		add_window.hide()
+		add_window.position = get_viewport().get_mouse_position() + Vector2(-200, 0)
+		add_window.show()
 
 func load_tree():
 	tree.clear()
@@ -47,7 +49,8 @@ func load_states(state: SaturnState, parent: TreeItem = null, path: Array[int] =
 	if parent == null:
 		tree_item.set_text(0, "State Machine")
 	else:
-		tree_item.set_text(0, state.get_state_name(context))
+		tree_item.set_text(0, state_name_utils.get_state_name(state))
+	tree_item.set_editable(0, true)
 	tree_item.set_icon(0, SaturnIconManager.get_icon_by_state(state))
 	
 	if state is SaturnStateGroup:

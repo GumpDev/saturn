@@ -8,6 +8,3 @@ func get_state(context: SaturnContext):
 		if state:
 			return state
 	return null
-
-func get_state_name(_context: SaturnContext):
-	return "Group -> %s items" % [len(children)]

@@ -31,6 +31,3 @@ func get_state(context: SaturnContext):
 	if get_result(context.get_argument_value(argument_name)):
 		return super(context)
 	return null
-
-func get_state_name(_context: SaturnContext):
-	return "Condition -> %s %s %s" % [argument_name, Operators.keys()[operator].to_lower(), value]
