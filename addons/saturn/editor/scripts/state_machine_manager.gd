@@ -10,13 +10,19 @@ var context: SaturnContext
 var state_machine: SaturnStateGroup
 
 const SaturnListTreeUtils = preload("res://addons/saturn/utils/SaturnListTreeUtils.gd")
+const SaturnStateCreator = preload("res://addons/saturn/utils/SaturnStateCreator.gd")
 const SaturnStateNameUtils = preload("res://addons/saturn/utils/SaturnStateNameUtils.gd")
-var list_tree_utils
+
+const StateValueEditor = preload("res://addons/saturn/editor/scenes/state_value_editor.tscn")
+const StateCooldownEditor = preload("res://addons/saturn/editor/scenes/state_cooldown_editor.tscn")
 var state_name_utils
 
 func _enter_tree():
 	tree.button_clicked.connect(_button_clicked)
 	tree.item_edited.connect(_state_renamed)
+	add_window.state_machine_updated.connect(func ():
+		load_tree()
+	)
 
 func _exit_tree():
 	tree.button_clicked.disconnect(_button_clicked)
@@ -35,22 +41,43 @@ func init(_machine_player: SaturnStatePlayer):
 	context = SaturnContext.new()
 	context.data_adapter = machine_player.data_adapter
 	
-	list_tree_utils = SaturnListTreeUtils.new(state_machine)
-	state_name_utils = SaturnStateNameUtils.new(context)
+	add_window.state_machine = state_machine
+	add_window.context = context
 	
+	state_name_utils = SaturnStateNameUtils.new(context)
 	load_tree()
 
 func _state_renamed():
 	var tree_item = tree.get_edited()
-	var state = list_tree_utils.get_state(tree_item)
-	state.custom_name = tree_item.get_text(0)
+	var state = SaturnListTreeUtils.get_state(state_machine, tree_item)
+	if state_name_utils.get_state_name(state) == tree_item.get_text(0):
+		state.custom_name = ""
+	else:
+		state.custom_name = tree_item.get_text(0)
 	if not tree_item.get_text(0):
 		tree_item.set_text(0, state_name_utils.get_state_name(state))
 
 func _button_clicked(item: TreeItem, column: int, id: int, mouse_button_index: int):
-	if id == 1:
-		add_window.position = get_viewport().get_mouse_position() + Vector2(-200, 0)
-		add_window.show()
+	match id:
+		1: 
+			add_window.position = get_viewport().get_mouse_position() + Vector2(-200, 0)
+			add_window.tree_item = item
+			add_window.show()
+		2:
+			var actual_state = SaturnListTreeUtils.get_state(state_machine, item)
+			if actual_state is SaturnStateValue:
+				var state_value_editor = StateValueEditor.instantiate()
+				state_value_editor.state_updated.connect(func (): load_tree())
+				EditorInterface.get_base_control().add_child(state_value_editor)
+				state_value_editor.show_popup(state_machine, context, null, item)
+			elif actual_state is SaturnStateCooldown:
+				var state_cooldown_editor = StateCooldownEditor.instantiate()
+				state_cooldown_editor.state_updated.connect(func (): load_tree())
+				EditorInterface.get_base_control().add_child(state_cooldown_editor)
+				state_cooldown_editor.show_popup(state_machine, context, null, item)
+		3:
+			SaturnStateCreator.remove_state(state_machine, item, func (): load_tree())
+	 
 
 func load_tree():
 	tree.clear()
@@ -72,7 +99,7 @@ func load_states(state: SaturnState, parent: TreeItem = null, path: Array[int] =
 		tree_item.add_button(0, SaturnIconManager.get_icon("add"), 1)
 	
 	if parent:
-		if state in [SaturnStateCondition, SaturnStateCooldown, SaturnStateValue]:
+		if state is SaturnStateCondition or SaturnStateCooldown or SaturnStateValue:
 			tree_item.add_button(0, SaturnIconManager.get_icon("edit"), 2)
 		tree_item.add_button(0, SaturnIconManager.get_icon("remove"), 3)
 

@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7l3l75htt0a6"]
+
+[ext_resource type="Script" path="res://addons/saturn/editor/scripts/state_cooldown_editor.gd" id="1_b34rh"]
+
+[node name="StateMachineEditValues" type="ConfirmationDialog" node_paths=PackedStringArray("time_input")]
+title = "Add state"
+initial_position = 2
+size = Vector2i(500, 250)
+visible = true
+unresizable = true
+script = ExtResource("1_b34rh")
+time_input = NodePath("CooldownState/Time")
+
+[node name="CooldownState" type="VBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 492.0
+offset_bottom = 201.0
+
+[node name="Label" type="Label" parent="CooldownState"]
+layout_mode = 2
+text = "Time"
+
+[node name="Time" type="SpinBox" parent="CooldownState"]
+layout_mode = 2
+min_value = 0.01
+step = 0.01
+value = 0.1
+suffix = "s"

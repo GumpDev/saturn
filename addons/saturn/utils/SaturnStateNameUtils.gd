@@ -11,7 +11,7 @@ func get_state_name(state: SaturnState):
 	
 	if state is SaturnStateCooldown:
 		var state_cooldown: SaturnStateCooldown = state
-		return "Cooldown -> %2.fs" % state_cooldown.time
+		return "Cooldown -> %2.2f s" % state_cooldown.time
 	if state is SaturnStateCondition:
 		var state_condition: SaturnStateCondition = state
 		return "Condition -> %s %s %s" % [state_condition.argument_name, SaturnStateCondition.Operators.keys()[state_condition.operator].to_lower(), state_condition.value]

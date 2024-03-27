@@ -17,7 +17,7 @@ func get_data_name(state):
 	return State.keys()[int(state)]
 
 func to_data(state):
-	return State.keys().find(state)
+	return str(State.keys().find(state))
 
 func get_data_list():
 	return State.keys()
