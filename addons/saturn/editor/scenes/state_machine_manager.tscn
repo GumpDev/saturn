@@ -15,8 +15,8 @@ font_size = 14
 font_color = Color(0.823529, 0.823529, 0.823529, 1)
 outline_size = 1
 
-[node name="StateMachineManager" type="Control" node_paths=PackedStringArray("tree", "add_window")]
-custom_minimum_size = Vector2(0, 150)
+[node name="State Machine" type="Control" node_paths=PackedStringArray("tree", "add_window", "not_loaded_label")]
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,6 +26,7 @@ grow_vertical = 2
 script = ExtResource("1_pr6ex")
 tree = NodePath("Tree")
 add_window = NodePath("AddWindow")
+not_loaded_label = NodePath("NotLoaded")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -57,6 +58,21 @@ grow_vertical = 2
 allow_reselect = true
 drop_mode_flags = 3
 select_mode = 1
+
+[node name="NotLoaded" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Select a SaturnStatePlayer to load the state machine"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="AddWindow" parent="." instance=ExtResource("8_gms3u")]
 visible = false

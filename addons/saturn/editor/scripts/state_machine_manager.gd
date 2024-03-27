@@ -3,6 +3,7 @@ extends Control
 
 @export var tree: Tree
 @export var add_window: Window
+@export var not_loaded_label: Label
 @onready var machine_player: SaturnStatePlayer
 
 var context: SaturnContext
@@ -13,7 +14,22 @@ const SaturnStateNameUtils = preload("res://addons/saturn/utils/SaturnStateNameU
 var list_tree_utils
 var state_name_utils
 
+func _enter_tree():
+	tree.button_clicked.connect(_button_clicked)
+	tree.item_edited.connect(_state_renamed)
+
+func _exit_tree():
+	tree.button_clicked.disconnect(_button_clicked)
+	tree.item_edited.disconnect(_state_renamed)
+
 func init(_machine_player: SaturnStatePlayer):
+	if not _machine_player:
+		tree.hide()
+		not_loaded_label.show()
+		return
+	
+	tree.show()
+	not_loaded_label.hide()
 	machine_player = _machine_player
 	state_machine = machine_player.state_machine
 	context = SaturnContext.new()
@@ -22,8 +38,6 @@ func init(_machine_player: SaturnStatePlayer):
 	list_tree_utils = SaturnListTreeUtils.new(state_machine)
 	state_name_utils = SaturnStateNameUtils.new(context)
 	
-	tree.button_clicked.connect(_button_clicked)
-	tree.item_edited.connect(_state_renamed)
 	load_tree()
 
 func _state_renamed():
@@ -50,7 +64,8 @@ func load_states(state: SaturnState, parent: TreeItem = null, path: Array[int] =
 		tree_item.set_text(0, "State Machine")
 	else:
 		tree_item.set_text(0, state_name_utils.get_state_name(state))
-	tree_item.set_editable(0, true)
+		tree_item.set_editable(0, true)
+	
 	tree_item.set_icon(0, SaturnIconManager.get_icon_by_state(state))
 	
 	if state is SaturnStateGroup:
