@@ -15,18 +15,20 @@ const SaturnStateNameUtils = preload("res://addons/saturn/utils/SaturnStateNameU
 
 const StateValueEditor = preload("res://addons/saturn/editor/scenes/state_value_editor.tscn")
 const StateCooldownEditor = preload("res://addons/saturn/editor/scenes/state_cooldown_editor.tscn")
+const StateConditionEditor = preload("res://addons/saturn/editor/scenes/state_condition_editor.tscn")
+
 var state_name_utils
 
 func _enter_tree():
 	tree.button_clicked.connect(_button_clicked)
 	tree.item_edited.connect(_state_renamed)
-	add_window.state_machine_updated.connect(func ():
-		load_tree()
-	)
+	tree.state_machine_updated.connect(load_tree)
+	add_window.state_machine_updated.connect(load_tree)
 
 func _exit_tree():
 	tree.button_clicked.disconnect(_button_clicked)
 	tree.item_edited.disconnect(_state_renamed)
+	tree.state_machine_updated.disconnect(load_tree)
 
 func init(_machine_player: SaturnStatePlayer):
 	if not _machine_player:
@@ -38,6 +40,7 @@ func init(_machine_player: SaturnStatePlayer):
 	not_loaded_label.hide()
 	machine_player = _machine_player
 	state_machine = machine_player.state_machine
+	tree.state_machine = state_machine
 	context = SaturnContext.new()
 	context.data_adapter = machine_player.data_adapter
 	
@@ -75,6 +78,11 @@ func _button_clicked(item: TreeItem, column: int, id: int, mouse_button_index: i
 				state_cooldown_editor.state_updated.connect(func (): load_tree())
 				EditorInterface.get_base_control().add_child(state_cooldown_editor)
 				state_cooldown_editor.show_popup(state_machine, context, null, item)
+			elif actual_state is SaturnStateCondition:
+				var state_condition_editor = StateConditionEditor.instantiate()
+				state_condition_editor.state_updated.connect(func (): load_tree())
+				EditorInterface.get_base_control().add_child(state_condition_editor)
+				state_condition_editor.show_popup(state_machine, context, null, item)
 		3:
 			SaturnStateCreator.remove_state(state_machine, item, func (): load_tree())
 	 

@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://cncnlgh6cqrct"]
+
+[ext_resource type="Script" path="res://addons/saturn/editor/scripts/state_condition_editor.gd" id="1_3e8pp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ec3qy"]
+font_color = Color(0.8, 0, 0, 1)
+
+[node name="StateConditionEditor" type="ConfirmationDialog" node_paths=PackedStringArray("operator_dropdown", "argument_input", "value_input", "error_label")]
+title = "Add state"
+initial_position = 2
+size = Vector2i(500, 255)
+visible = true
+unresizable = true
+dialog_hide_on_ok = false
+script = ExtResource("1_3e8pp")
+operator_dropdown = NodePath("ConditionState/OperatorDropdown")
+argument_input = NodePath("ConditionState/Argument")
+value_input = NodePath("ConditionState/Value")
+error_label = NodePath("ConditionState/ErrorLabel")
+
+[node name="ConditionState" type="VBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 492.0
+offset_bottom = 206.0
+
+[node name="Label" type="Label" parent="ConditionState"]
+layout_mode = 2
+text = "Argument"
+
+[node name="Argument" type="LineEdit" parent="ConditionState"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="ConditionState"]
+layout_mode = 2
+text = "Operation"
+
+[node name="OperatorDropdown" type="OptionButton" parent="ConditionState"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="ConditionState"]
+layout_mode = 2
+text = "Value"
+
+[node name="Value" type="LineEdit" parent="ConditionState"]
+layout_mode = 2
+
+[node name="ErrorLabel" type="Label" parent="ConditionState"]
+visible = false
+layout_mode = 2
+text = "You need to fill all inputs!"
+label_settings = SubResource("LabelSettings_ec3qy")
+horizontal_alignment = 1

@@ -1,29 +1,34 @@
 class_name SaturnStatePlayer extends Node
 
 @export var state_machine: SaturnStateGroup
+@export var initial_arguments: Dictionary
 @export var data_adapter: SaturnDataAdapter
 
 var context: SaturnContext = SaturnContext.new()
 var _old_state: String = ""
 var _actual_state
+var _locked_state: String = ""
+var _locked_state_time: int
 
 signal state_changed()
 
 func _ready():
 	context.data_adapter = data_adapter
+	context.arguments = initial_arguments
 	if data_adapter:
 		_actual_state = data_adapter.get_data(null)
 
-func run_cooldowns():
-	if _actual_state == context.cooldown_state: return
-	for cooldown in context.cooldowns:
-		cooldown.is_on_cooldown = true
-		get_tree().create_timer(cooldown.time).timeout.connect(func (): cooldown.is_on_cooldown = false)
-	context.cooldowns.clear()
-	context.cooldown_state = null
-
 func set_argument(name: String, value):
 	context.arguments[name] = value
+
+func lock_state(_state: String, _time: float):
+	var msec = Time.get_ticks_msec()
+	_locked_state = _state
+	_locked_state_time = msec
+	await get_tree().create_timer(_time).timeout
+	if _locked_state_time != msec: return
+	if _locked_state != _state: return
+	_locked_state = ""
 
 func get_state():
 	if data_adapter:
@@ -36,7 +41,12 @@ func update_state(state):
 	_old_state = state
 
 func _process(_delta):
-	var state = state_machine.get_state(context)
-	if state != _old_state:
-		update_state(state)
-		run_cooldowns()
+	if _locked_state:
+		if _locked_state != _old_state:
+			update_state(_locked_state)
+			context.run_cooldowns(get_tree(), _actual_state)
+	else:
+		var state = state_machine.get_state(context)
+		if state != _old_state:
+			update_state(state)
+			context.run_cooldowns(get_tree(), _actual_state)

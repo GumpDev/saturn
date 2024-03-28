@@ -2,6 +2,16 @@ extends Object
 
 var context: SaturnContext
 
+const operator_name = {
+	SaturnStateCondition.Operators.NONE: "",
+	SaturnStateCondition.Operators.EQUALS: "=",
+	SaturnStateCondition.Operators.NOT_EQUALS: "!=",
+	SaturnStateCondition.Operators.GREATER_THAN: ">",
+	SaturnStateCondition.Operators.GREATER_THAN_OR_EQUALS: ">=",
+	SaturnStateCondition.Operators.LESS_THAN: "<",
+	SaturnStateCondition.Operators.LESS_THAN_OR_EQUALS: "<="
+}
+
 func _init(_context: SaturnContext):
 	context = _context
 
@@ -14,7 +24,7 @@ func get_state_name(state: SaturnState):
 		return "Cooldown -> %2.2f s" % state_cooldown.time
 	if state is SaturnStateCondition:
 		var state_condition: SaturnStateCondition = state
-		return "Condition -> %s %s %s" % [state_condition.argument_name, SaturnStateCondition.Operators.keys()[state_condition.operator].to_lower(), state_condition.value]
+		return "Condition -> %s %s %s" % [state_condition.argument_name, operator_name[state_condition.operator], state_condition.value]
 	if state is SaturnStateGroup:
 		var state_group: SaturnStateGroup = state
 		return "Group -> %s items" % len(state_group.children)
