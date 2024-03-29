@@ -29,6 +29,7 @@ func _exit_tree():
 	tree.button_clicked.disconnect(_button_clicked)
 	tree.item_edited.disconnect(_state_renamed)
 	tree.state_machine_updated.disconnect(load_tree)
+	add_window.state_machine_updated.disconnect(load_tree)
 
 func init(_machine_player: SaturnStatePlayer):
 	if not _machine_player:

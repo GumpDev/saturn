@@ -10,6 +10,9 @@ const SaturnListTreeUtils = preload("res://addons/saturn/utils/SaturnListTreeUti
 func _can_drop_data(at_position, data):
 	var drop_section = get_drop_section_at_position(at_position)
 	var tree_item = get_item_at_position(at_position)
+	if not tree_item:
+		return false
+	
 	if drop_section == 0:
 		var state = SaturnListTreeUtils.get_state(state_machine, tree_item)
 		if not state is SaturnStateGroup:
