@@ -1,8 +1,8 @@
 @icon("res://addons/saturn/icons/SaturnPlayer.svg")
 class_name SaturnStatePlayer extends Node
 
-@export var state_machine: SaturnStateGroup
-@export var initial_arguments: Dictionary
+@export var state_machine: SaturnStateGroup = SaturnStateGroup.new()
+@export var initial_arguments: Dictionary = {}
 @export var data_adapter: SaturnDataAdapter
 
 var context: SaturnContext = SaturnContext.new()

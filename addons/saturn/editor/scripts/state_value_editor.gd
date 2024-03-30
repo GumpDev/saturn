@@ -3,7 +3,6 @@ extends ConfirmationDialog
 
 @export var state_dropdown: OptionButton
 @export var state_input: SpinBox
-@export var error_label: Label
 
 var context: SaturnContext
 var state_machine: SaturnStateGroup
@@ -17,7 +16,6 @@ const SaturnStateCreator = preload("res://addons/saturn/utils/SaturnStateCreator
 const SaturnListTreeUtils = preload("res://addons/saturn/utils/SaturnListTreeUtils.gd")
 
 func _ready():
-	error_label.hide()
 	confirmed.connect(create_item)
 
 func show_popup(_state_machine: SaturnStateGroup, _context: SaturnContext, _parent: TreeItem, _tree_item: TreeItem = null):
@@ -57,14 +55,6 @@ func load_values():
 		state_input.show()
 
 func create_item():
-	if state_dropdown.selected == -1 and state_input.text.is_empty():
-		if data_adapter:
-			state_dropdown.grab_focus()
-		else:
-			state_input.grab_focus()
-		error_label.show()
-		return
-	
 	if not tree_item:
 		if data_adapter:
 			SaturnStateCreator.create_state_value(state_machine, parent, state_dropdown.selected)

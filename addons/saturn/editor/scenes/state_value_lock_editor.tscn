@@ -1,9 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://djnaskxdkb3pt"]
+[gd_scene load_steps=2 format=3 uid="uid://djnaskxdkb3pt"]
 
 [ext_resource type="Script" path="res://addons/saturn/editor/scripts/state_value_lock_editor.gd" id="1_n8cuk"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_7k6pk"]
-font_color = Color(0.8, 0, 0, 1)
 
 [node name="State Value Editor" type="ConfirmationDialog" node_paths=PackedStringArray("state_dropdown", "state_input", "time_input", "error_label")]
 title = "Add state"
@@ -16,7 +13,7 @@ script = ExtResource("1_n8cuk")
 state_dropdown = NodePath("ValueState/StateDropdown")
 state_input = NodePath("ValueState/State")
 time_input = NodePath("ValueState/Time")
-error_label = NodePath("ValueState/ErrorLabel")
+error_label = NodePath("")
 
 [node name="ValueState" type="VBoxContainer" parent="."]
 offset_left = 8.0
@@ -45,10 +42,3 @@ min_value = 0.01
 step = 0.01
 value = 0.1
 suffix = "s"
-
-[node name="ErrorLabel" type="Label" parent="ValueState"]
-visible = false
-layout_mode = 2
-text = "You need to fill the state value input!"
-label_settings = SubResource("LabelSettings_7k6pk")
-horizontal_alignment = 1

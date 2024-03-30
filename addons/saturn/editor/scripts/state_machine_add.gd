@@ -19,33 +19,27 @@ const StateCooldownEditor = preload("res://addons/saturn/editor/scenes/state_coo
 func _on_item_list_item_clicked(index, at_position, mouse_button_index):
 	match index:
 		0:
-			var selected_state = SaturnListTreeUtils.get_state(state_machine, tree_item)
 			var state_condition_editor = StateConditionEditor.instantiate()
-			state_condition_editor.state_updated.connect(func (): state_machine_updated.emit())
-			EditorInterface.get_base_control().add_child(state_condition_editor)
-			state_condition_editor.show_popup(state_machine, context, tree_item)
+			instantiate_menu(state_condition_editor)
 		1:
-			var selected_state = SaturnListTreeUtils.get_state(state_machine, tree_item)
 			var state_cooldown_editor = StateCooldownEditor.instantiate()
-			state_cooldown_editor.state_updated.connect(func (): state_machine_updated.emit())
-			EditorInterface.get_base_control().add_child(state_cooldown_editor)
-			state_cooldown_editor.show_popup(state_machine, context, tree_item)
+			instantiate_menu(state_cooldown_editor)
 		2:
 			SaturnStateCreator.create_state_group(state_machine, tree_item)
 			state_machine_updated.emit()
 		3:
-			var selected_state = SaturnListTreeUtils.get_state(state_machine, tree_item)
 			var state_value_editor = StateValueEditor.instantiate()
-			state_value_editor.state_updated.connect(func (): state_machine_updated.emit())
-			EditorInterface.get_base_control().add_child(state_value_editor)
-			state_value_editor.show_popup(state_machine, context, tree_item)
+			instantiate_menu(state_value_editor)
 		4:
-			var selected_state = SaturnListTreeUtils.get_state(state_machine, tree_item)
 			var state_value_editor = StateValueLockEditor.instantiate()
-			state_value_editor.state_updated.connect(func (): state_machine_updated.emit())
-			EditorInterface.get_base_control().add_child(state_value_editor)
-			state_value_editor.show_popup(state_machine, context, tree_item)
+			instantiate_menu(state_value_editor)
 	hide()
+
+func instantiate_menu(menu: Node):
+	var selected_state = SaturnListTreeUtils.get_state(state_machine, tree_item)
+	menu.state_updated.connect(func (): state_machine_updated.emit())
+	EditorInterface.get_base_control().add_child(menu)
+	menu.show_popup(state_machine, context, tree_item)
 
 func _on_close_requested():
 	hide()

@@ -72,27 +72,23 @@ func _button_clicked(item: TreeItem, column: int, id: int, mouse_button_index: i
 			var actual_state = SaturnListTreeUtils.get_state(state_machine, item)
 			if actual_state is SaturnStateValueLock:
 				var state_value_lock_editor = StateValueLockEditor.instantiate()
-				state_value_lock_editor.state_updated.connect(func (): load_tree())
-				EditorInterface.get_base_control().add_child(state_value_lock_editor)
-				state_value_lock_editor.show_popup(state_machine, context, null, item)
+				instantiate_menu(item, state_value_lock_editor)
 			elif actual_state is SaturnStateValue:
 				var state_value_editor = StateValueEditor.instantiate()
-				state_value_editor.state_updated.connect(func (): load_tree())
-				EditorInterface.get_base_control().add_child(state_value_editor)
-				state_value_editor.show_popup(state_machine, context, null, item)
+				instantiate_menu(item, state_value_editor)
 			elif actual_state is SaturnStateCooldown:
 				var state_cooldown_editor = StateCooldownEditor.instantiate()
-				state_cooldown_editor.state_updated.connect(func (): load_tree())
-				EditorInterface.get_base_control().add_child(state_cooldown_editor)
-				state_cooldown_editor.show_popup(state_machine, context, null, item)
+				instantiate_menu(item, state_cooldown_editor)
 			elif actual_state is SaturnStateCondition:
 				var state_condition_editor = StateConditionEditor.instantiate()
-				state_condition_editor.state_updated.connect(func (): load_tree())
-				EditorInterface.get_base_control().add_child(state_condition_editor)
-				state_condition_editor.show_popup(state_machine, context, null, item)
+				instantiate_menu(item, state_condition_editor)
 		3:
 			SaturnStateCreator.remove_state(state_machine, item, func (): load_tree())
 	 
+func instantiate_menu(item: TreeItem, menu: Node):
+	menu.state_updated.connect(func (): load_tree())
+	EditorInterface.get_base_control().add_child(menu)
+	menu.show_popup(state_machine, context, null, item)
 
 func load_tree():
 	tree.clear()
