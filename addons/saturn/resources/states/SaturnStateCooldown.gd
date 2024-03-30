@@ -1,3 +1,4 @@
+@icon("res://addons/saturn/icons/TreeCooldown.svg")
 class_name SaturnStateCooldown extends SaturnStateGroup
 
 @export var time: float

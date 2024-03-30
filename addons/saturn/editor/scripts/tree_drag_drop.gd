@@ -34,6 +34,9 @@ func _drop_data(at_position, tree_item_dropped):
 	
 	if drop_section == 0:
 		if not state_below is SaturnStateGroup: return
+		if state_dropped is SaturnStateGroup:
+			if state_below in get_flat_children(state_dropped):
+				return
 		SaturnListTreeUtils.get_parent(state_machine, tree_item_dropped).children.remove_at(SaturnListTreeUtils.get_parent_index(state_machine, tree_item_dropped))
 		state_below.children.insert(0, state_dropped)
 	else:
@@ -49,3 +52,11 @@ func _get_drag_data(at_position):
 	var tree_item = get_item_at_position(at_position)
 	set_drop_mode_flags(DROP_MODE_INBETWEEN + DROP_MODE_ON_ITEM)
 	return tree_item
+
+func get_flat_children(state_group: SaturnStateGroup):
+	var states = []
+	for state in state_group.children:
+		if state is SaturnStateGroup:
+			states.append_array(get_flat_children(state))
+		states.append(state)
+	return states

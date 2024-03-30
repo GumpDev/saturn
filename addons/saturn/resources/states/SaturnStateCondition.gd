@@ -1,3 +1,4 @@
+@icon("res://addons/saturn/icons/TreeCondition.svg")
 class_name SaturnStateCondition extends SaturnStateGroup
 
 @export var argument_name: String

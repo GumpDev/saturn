@@ -14,6 +14,7 @@ const SaturnStateCreator = preload("res://addons/saturn/utils/SaturnStateCreator
 const SaturnStateNameUtils = preload("res://addons/saturn/utils/SaturnStateNameUtils.gd")
 
 const StateValueEditor = preload("res://addons/saturn/editor/scenes/state_value_editor.tscn")
+const StateValueLockEditor = preload("res://addons/saturn/editor/scenes/state_value_lock_editor.tscn")
 const StateCooldownEditor = preload("res://addons/saturn/editor/scenes/state_cooldown_editor.tscn")
 const StateConditionEditor = preload("res://addons/saturn/editor/scenes/state_condition_editor.tscn")
 
@@ -69,7 +70,12 @@ func _button_clicked(item: TreeItem, column: int, id: int, mouse_button_index: i
 			add_window.show()
 		2:
 			var actual_state = SaturnListTreeUtils.get_state(state_machine, item)
-			if actual_state is SaturnStateValue:
+			if actual_state is SaturnStateValueLock:
+				var state_value_lock_editor = StateValueLockEditor.instantiate()
+				state_value_lock_editor.state_updated.connect(func (): load_tree())
+				EditorInterface.get_base_control().add_child(state_value_lock_editor)
+				state_value_lock_editor.show_popup(state_machine, context, null, item)
+			elif actual_state is SaturnStateValue:
 				var state_value_editor = StateValueEditor.instantiate()
 				state_value_editor.state_updated.connect(func (): load_tree())
 				EditorInterface.get_base_control().add_child(state_value_editor)

@@ -1,3 +1,4 @@
+@icon("res://addons/saturn/icons/SaturnPlayer.svg")
 class_name SaturnStatePlayer extends Node
 
 @export var state_machine: SaturnStateGroup
@@ -13,6 +14,7 @@ signal state_changed()
 func _ready():
 	if not data_adapter:
 		data_adapter = SaturnDataAdapter.new()
+	context.tree = get_tree()
 	context.data_adapter = data_adapter
 	context.arguments = initial_arguments
 
@@ -20,7 +22,7 @@ func set_argument(name: String, value):
 	context.arguments[name] = value
 
 func lock_state(_state: Variant, _time: float):
-	context.lock_state(get_tree(), _state, _time)
+	context.lock_state(_state, _time)
 
 func get_state():
 	if data_adapter:
@@ -31,7 +33,7 @@ func update_state(state):
 	_actual_state = state
 	state_changed.emit()
 	_old_state = state
-	context.run_cooldowns(get_tree(), _actual_state)
+	context.run_cooldowns(_actual_state)
 
 func _process(_delta):
 	if context._locked_state != -1:

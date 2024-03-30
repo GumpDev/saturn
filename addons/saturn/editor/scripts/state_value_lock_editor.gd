@@ -3,6 +3,7 @@ extends ConfirmationDialog
 
 @export var state_dropdown: OptionButton
 @export var state_input: SpinBox
+@export var time_input: SpinBox
 @export var error_label: Label
 
 var context: SaturnContext
@@ -32,9 +33,9 @@ func show_popup(_state_machine: SaturnStateGroup, _context: SaturnContext, _pare
 	load_values()
 	
 	if tree_item:
-		title = "Edit State"
+		title = "Edit State Lock"
 	else:
-		title = "Add State"
+		title = "Add State Lock"
 		
 	if tree_item:
 		var value_state: SaturnStateValue = SaturnListTreeUtils.get_state(state_machine, tree_item)
@@ -45,6 +46,7 @@ func show_popup(_state_machine: SaturnStateGroup, _context: SaturnContext, _pare
 func load_values():
 	state_dropdown.clear()
 	state_input.value = 0
+	time_input.value = 0.1
 	if data_adapter:
 		for item in data_adapter.get_data_list():
 			var i = 0
@@ -67,12 +69,13 @@ func create_item():
 	
 	if not tree_item:
 		if data_adapter:
-			SaturnStateCreator.create_state_value(state_machine, parent, state_dropdown.selected)
+			SaturnStateCreator.create_state_value_lock(state_machine, parent, state_dropdown.selected, time_input.value)
 		else:
-			SaturnStateCreator.create_state_value(state_machine, parent, state_input.value)
+			SaturnStateCreator.create_state_value_lock(state_machine, parent, state_input.value, time_input.value)
 	else:
-		var actual_state: SaturnStateValue = SaturnListTreeUtils.get_state(state_machine, tree_item)
+		var actual_state: SaturnStateValueLock = SaturnListTreeUtils.get_state(state_machine, tree_item)
 		actual_state.value = state_input.value if not data_adapter else state_dropdown.selected
+		actual_state.time = time_input.value
 		
 	state_updated.emit()
 	queue_free()

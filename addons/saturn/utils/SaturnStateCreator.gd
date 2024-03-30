@@ -14,6 +14,13 @@ static func create_state_value(state_machine: SaturnStateGroup, tree_item: TreeI
 	value_state.value = value
 	item_state.children.append(value_state)
 	
+static func create_state_value_lock(state_machine: SaturnStateGroup, tree_item: TreeItem, value: int, time: float):
+	var item_state: SaturnStateGroup = SaturnListTreeUtils.get_state(state_machine, tree_item)
+	var value_state_lock = SaturnStateValueLock.new()
+	value_state_lock.value = value
+	value_state_lock.time = time
+	item_state.children.append(value_state_lock)
+	
 static func create_state_cooldown(state_machine: SaturnStateGroup, tree_item: TreeItem, time: float):
 	var item_state: SaturnStateGroup = SaturnListTreeUtils.get_state(state_machine, tree_item)
 	var cooldown_state = SaturnStateCooldown.new()
