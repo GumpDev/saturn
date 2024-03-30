@@ -33,6 +33,6 @@ func get_state_name(state: SaturnState):
 		var value_name = state_value.value
 		if context.data_adapter:
 			var data_adapter = context.data_adapter.get_script().new()
-			value_name = data_adapter.get_data_name(state_value.value)
+			value_name = data_adapter.get_data_list()[state_value.value]
 		return "State -> %s" % value_name
 	return ""

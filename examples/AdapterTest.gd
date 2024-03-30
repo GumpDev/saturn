@@ -6,18 +6,11 @@ enum State{
 	CROUCHING
 }
 
-func get_data(state):
-	if not state:
-		return State.IDLE
-	return int(state)
+func from_data(state: Variant) -> int:
+	return state
 
-func get_data_name(state):
-	if not state:
-		return State.keys()[0]
-	return State.keys()[int(state)]
+func to_data(state: int) -> State:
+	return State.get(State.keys()[state])
 
-func to_data(state):
-	return str(State.keys().find(state))
-
-func get_data_list():
+func get_data_list() -> Array:
 	return State.keys()

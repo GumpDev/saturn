@@ -5,48 +5,40 @@ class_name SaturnStatePlayer extends Node
 @export var data_adapter: SaturnDataAdapter
 
 var context: SaturnContext = SaturnContext.new()
-var _old_state: String = ""
-var _actual_state
-var _locked_state: String = ""
-var _locked_state_time: int
+var _old_state: int = 0
+var _actual_state: int = 0
 
 signal state_changed()
 
 func _ready():
+	if not data_adapter:
+		data_adapter = SaturnDataAdapter.new()
 	context.data_adapter = data_adapter
 	context.arguments = initial_arguments
-	if data_adapter:
-		_actual_state = data_adapter.get_data(null)
 
 func set_argument(name: String, value):
 	context.arguments[name] = value
 
-func lock_state(_state: String, _time: float):
-	var msec = Time.get_ticks_msec()
-	_locked_state = _state
-	_locked_state_time = msec
-	await get_tree().create_timer(_time).timeout
-	if _locked_state_time != msec: return
-	if _locked_state != _state: return
-	_locked_state = ""
+func lock_state(_state: Variant, _time: float):
+	context.lock_state(get_tree(), _state, _time)
 
 func get_state():
 	if data_adapter:
-		return data_adapter.get_data(_actual_state)
+		return data_adapter.to_data(_actual_state)
 	return _actual_state
 
 func update_state(state):
 	_actual_state = state
 	state_changed.emit()
 	_old_state = state
+	context.run_cooldowns(get_tree(), _actual_state)
 
 func _process(_delta):
-	if _locked_state:
-		if _locked_state != _old_state:
-			update_state(_locked_state)
-			context.run_cooldowns(get_tree(), _actual_state)
+	if context._locked_state != -1:
+		if context._locked_state != _old_state:
+			update_state(context._locked_state)
 	else:
 		var state = state_machine.get_state(context)
+		if not state: state = 0
 		if state != _old_state:
 			update_state(state)
-			context.run_cooldowns(get_tree(), _actual_state)

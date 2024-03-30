@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://d2s3523g1htp3"]
+[gd_scene load_steps=7 format=3 uid="uid://d2s3523g1htp3"]
 
 [ext_resource type="Texture2D" uid="uid://cccdclxkeqb2v" path="res://addons/saturn/icons/TreeGroup.svg" id="1_cu7ww"]
 [ext_resource type="Script" path="res://addons/saturn/editor/scripts/state_machine_add.gd" id="1_xcxoq"]
 [ext_resource type="Texture2D" uid="uid://3bvoh067yaao" path="res://addons/saturn/icons/TreeCondition.svg" id="2_u4xfd"]
 [ext_resource type="Texture2D" uid="uid://cj5w2qtl5wcru" path="res://addons/saturn/icons/TreeCooldown.svg" id="3_qokxv"]
 [ext_resource type="Texture2D" uid="uid://4xn7400eioe" path="res://addons/saturn/icons/TreeValue.svg" id="4_8kyj5"]
+[ext_resource type="Texture2D" uid="uid://b7da4gubb5ynq" path="res://addons/saturn/icons/TreeLockState.svg" id="6_todsq"]
 
 [node name="StateMachineAdd" type="Window" node_paths=PackedStringArray("item_list")]
 title = "Add State"
@@ -22,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-item_count = 4
+item_count = 5
 item_0/text = "Condition"
 item_0/icon = ExtResource("2_u4xfd")
 item_1/text = "Cooldown"
@@ -31,6 +32,8 @@ item_2/text = "Group"
 item_2/icon = ExtResource("1_cu7ww")
 item_3/text = "State"
 item_3/icon = ExtResource("4_8kyj5")
+item_4/text = "State Lock"
+item_4/icon = ExtResource("6_todsq")
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="item_clicked" from="ItemList" to="." method="_on_item_list_item_clicked"]

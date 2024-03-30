@@ -12,4 +12,4 @@ func _ready():
 func _physics_process(_delta):
 	saturn_player.set_argument("space", Input.is_action_pressed("space"))
 	if Input.is_action_pressed("ctrl"):
-		saturn_player.lock_state("2", 2)
+		saturn_player.lock_state(TestDataAdapter.State.CROUCHING, 2)

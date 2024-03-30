@@ -38,10 +38,9 @@ func show_popup(_state_machine: SaturnStateGroup, _context: SaturnContext, _pare
 		
 	if tree_item:
 		var value_state: SaturnStateValue = SaturnListTreeUtils.get_state(state_machine, tree_item)
-		state_input.text = value_state.value
+		state_input.text = str(value_state.value)
 		if data_adapter:
-			var value_state_id = value_state.value
-			state_dropdown.select(int(value_state_id))
+			state_dropdown.select(value_state.value)
 	
 func load_values():
 	state_dropdown.clear()
@@ -68,12 +67,12 @@ func create_item():
 	
 	if not tree_item:
 		if data_adapter:
-			SaturnStateCreator.create_state_value(state_machine, parent, data_adapter.to_data(data_adapter.get_data_name(state_dropdown.selected)))
+			SaturnStateCreator.create_state_value(state_machine, parent, state_dropdown.selected)
 		else:
-			SaturnStateCreator.create_state_value(state_machine, parent, state_input.text)
+			SaturnStateCreator.create_state_value(state_machine, parent, int(state_input.text))
 	else:
 		var actual_state: SaturnStateValue = SaturnListTreeUtils.get_state(state_machine, tree_item)
-		actual_state.value = state_input.text if not data_adapter else data_adapter.to_data(data_adapter.get_data_name(state_dropdown.selected))
+		actual_state.value = int(state_input.text) if not data_adapter else state_dropdown.selected
 		
 	state_updated.emit()
 	queue_free()

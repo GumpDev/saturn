@@ -8,7 +8,7 @@ static func create_state_group(state_machine: SaturnStateGroup, tree_item: TreeI
 	var group_state = SaturnStateGroup.new()
 	item_state.children.append(group_state)
 	
-static func create_state_value(state_machine: SaturnStateGroup, tree_item: TreeItem, value: String):
+static func create_state_value(state_machine: SaturnStateGroup, tree_item: TreeItem, value: int):
 	var item_state: SaturnStateGroup = SaturnListTreeUtils.get_state(state_machine, tree_item)
 	var value_state = SaturnStateValue.new()
 	value_state.value = value
